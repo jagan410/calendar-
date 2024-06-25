@@ -1,0 +1,220 @@
+ <html>
+  <head>
+    <style>
+*{
+  margin:0;
+  box-sizing:border-box;
+  cursor:pointer;
+}
+body{
+ font-family:sans-serif;
+}
+
+.wrapper{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ width:100%;
+ height:100%;
+ background-color:white;
+}
+
+.calendar{
+ width:400px;
+ background-color:white;
+ height:350px;
+ box-shadow:2px 2px 5px 5px #10493d;
+}
+
+.month{
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+  height:30%;
+  align-items:center;
+  background-color:#2ecc71;
+  color:#fff;
+  margin:0;
+  padding:20px 10px;
+}
+
+.prev,.next{
+ width:30px;
+ height:30px;
+ background-color:rgba(0,0,0,0.2);
+ text-align:center;
+ border-radius:50%;
+ transition:all 0.4s;
+}
+
+.prev:hover,.next:hover{
+ background-color:rgba(0,0,0,0.6);
+}
+
+#month_name{
+ font-size:30px;
+}
+.weekends{
+  background-color:#27ae60;
+  color:#fff;
+  display:flex;
+  justify-content:space-around;
+}
+
+.weekends div:hover{
+  background-color:#27ae69;
+  color:black;
+ 
+}
+
+.days{
+  display:flex;
+  flex-wrap:wrap;
+  text-align:center;
+  font-weight:300;
+  padding:10px 10px;
+ 
+}
+
+
+.days div{
+ width:14.18%;
+ margin-bottom:10px;
+ padding:4px 0px;
+ transition:all 0.4s;
+}
+
+.days div:hover{
+ background-color:#dfe6e9;
+ color:black;
+}
+
+.today{
+ background-color:#27ae60;
+ color:#fff;
+}
+
+.prev_date{
+ color:#555;
+}
+</style>
+  </head>
+
+  <body onLoad="RenderDate()">
+   
+   <div class="wrapper">
+      <div class="calendar">
+
+        <div class="month">
+           <div class="prev" onClick="moveDate('prev')">
+              <span><h2><</h2></span>
+           </div>
+           <div>
+             <h2 id="month_name"></h2>
+             <p id="date_str"></p>
+           </div>
+           <div class="next" onClick="moveDate('next')">
+              <span><h2>></h2></span>
+           </div>
+        </div>
+
+        <div class="weekends">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thur</div>
+            <div>Fri</div>
+            <div>Sat</div>    
+        </div>
+
+        <div class="days">
+         
+        </div>
+   </div>
+
+ 
+  </body>
+
+  <script>
+//current date with time
+let dt=new Date();
+
+function RenderDate(){
+
+dt.setDate(1);
+let day=dt.getDay();
+//0-6(sun-sat)
+//console.log(dt.getDay())
+
+//finding 30 or 31 days
+let endDate=new Date(
+   //2024
+   dt.getFullYear(),
+   //april 30 with time
+   dt.getMonth()+1,
+   0
+).getDate();
+
+//console.log(endDate);
+
+//previous date
+let prevDate=new Date(
+   //2024
+   dt.getFullYear(),
+   //april 30 with time
+   dt.getMonth(),
+   0
+).getDate();
+
+//current date
+let today=new Date();
+//console.log(today);
+
+
+let months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+//dt.getMonth() returns number of month
+document.getElementById("month_name").innerHTML=months[dt.getMonth()];
+
+
+//current date
+document.getElementById("date_str").innerHTML=dt.toDateString();
+
+let cells="";
+
+//setting empty cells for previous month dates
+for(x=day;x>0;x--){
+  cells=cells+"<div class='prev_date'>"+(prevDate-x+1)+"</div>";
+}
+
+for(i=1;i<=endDate;i++){
+  if(i==today.getDate() && dt.getMonth()==today.getMonth()){
+    cells=cells+"<div class='today'>"+i+"</div>"
+  }
+  else{
+    cells=cells+"<div>"+i+"</div>";
+  }
+
+}
+
+document.getElementsByClassName("days")[0].innerHTML=cells;
+
+}
+
+
+
+function moveDate(para){
+   if(para=='prev'){
+      dt.setMonth(dt.getMonth()-1);
+      RenderDate();
+   }
+   else if(para=='next'){
+      dt.setMonth(dt.getMonth()+1);
+      RenderDate();
+   }
+
+}
+</script>
+
+</html>
